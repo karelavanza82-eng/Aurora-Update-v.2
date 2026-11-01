@@ -43,16 +43,16 @@ class GlassScreenChrome internal constructor(
 }
 
 @Composable
-fun rememberGlassScreenChrome(background: Color): GlassScreenChrome {
+fun rememberGlassScreenChrome(background: Color, backgroundBrush: androidx.compose.ui.graphics.Brush? = null): GlassScreenChrome {
     val freeze = rememberBackdropFreeze()
     val backdrop = rememberLayerBackdrop(
         // Fills the screen background into the capture BEFORE content, same
         // reason MainActivity's appBackdrop does: without it the list records
         // onto a transparent canvas and the blur reads as part-transparent /
         // ghosted instead of solid frosted content.
-        onDraw = remember(background) {
+        onDraw = remember(background, backgroundBrush) {
             val bg = background
-            { drawRect(bg); drawContent() }
+            { if (backgroundBrush != null) drawRect(backgroundBrush) else drawRect(bg); drawContent() }
         }
     )
     val hazeState = remember { HazeState() }

@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -67,6 +68,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.convx.music.LocalPlayerAwareWindowInsets
 import com.convx.music.R
+import com.convx.music.ui.component.settingsGlassCard
+import com.convx.music.constants.SettingsBackgroundKey
+import com.convx.music.ui.component.liquidGlass
+import com.convx.music.ui.component.LocalGlassEffectConfig
 import com.convx.music.core.updater.getAutoUpdateCheckSetting
 import com.convx.music.core.updater.getUpdateAvailableState
 import com.convx.music.ui.component.AccountAvatar
@@ -129,7 +134,12 @@ fun SettingsScreen(
     var selectedHubId by rememberSaveable { mutableStateOf(SettingsHubs.player.id) }
     val searchEntries = rememberSearchEntries()
 
-    BoxWithConstraints(Modifier.fillMaxSize().background(IosTheme.colors.systemGroupedBackground)) {
+    val (bgKey) = rememberPreference(SettingsBackgroundKey, defaultValue = SettingsBackgroundPreset.AURORA.key)
+    val pageBrush = SettingsBackgroundPreset.fromKey(bgKey).brush()
+
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        // Drawn inside the captured layer, so the glass cards reflect this gradient.
+        pageBrush?.let { Box(Modifier.fillMaxSize().background(it)) }
         val split = maxWidth >= SplitWidth
         val trailing: (SettingsLink) -> String? = { if (it == updateLink && updateAvailable) "1" else null }
 
@@ -147,6 +157,8 @@ fun SettingsScreen(
                 if (query.isBlank()) item("localOnly") {
                     Spacer(Modifier.height(20.dp))
                     LocalOnlyRow()
+                    Spacer(Modifier.height(14.dp))
+                    SettingsBackgroundPicker()
                 }
                 if (query.isBlank()) {
                     if (!sidebar) item("tiles") {
@@ -278,8 +290,7 @@ private fun LocalOnlyRow() {
     Row(
         Modifier
             .fillMaxWidth()
-            .clip(ContinuousRoundedRectangle(IosMetrics.GroupedCornerRadius))
-            .background(Color.White.copy(alpha = 0.06f))
+            .settingsGlassCard(shape = RoundedCornerShape(IosMetrics.GroupedCornerRadius))
             .clickable { setLocalOnly(!localOnly) }
             .defaultMinSize(minHeight = 56.dp)
             .padding(horizontal = 14.dp, vertical = 8.dp),
@@ -306,7 +317,7 @@ private fun ProfileCard(accountName: String, accountImageUrl: String?, onClick: 
         Modifier
             .fillMaxWidth()
             .clip(ContinuousRoundedRectangle(20.dp))
-            .background(Color.White.copy(alpha = 0.06f))
+            .settingsGlassCard(shape = RoundedCornerShape(26.dp))
             .iosRowPress(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -426,11 +437,11 @@ private fun SettingsTileGrid(links: List<SettingsLink>, onAction: (SettingsActio
 
 @Composable
 private fun SettingsTile(link: SettingsLink, modifier: Modifier, onClick: () -> Unit) {
+    val glass = Modifier.settingsGlassCard(shape = RoundedCornerShape(26.dp))
     Column(
         modifier
             .heightIn(min = 124.dp)
-            .clip(ContinuousRoundedRectangle(26.dp))
-            .background(Color.White.copy(alpha = 0.07f))
+            .then(glass)
             .clickable(onClick = onClick)
             .padding(18.dp),
     ) {

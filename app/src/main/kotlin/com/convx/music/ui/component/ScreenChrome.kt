@@ -120,11 +120,12 @@ fun ScreenScaffold(
     onBack: (() -> Unit)? = null,
     onBackLongClick: (() -> Unit)? = null,
     pageColor: Color = AppTheme.colorScheme.background,
+    backgroundBrush: androidx.compose.ui.graphics.Brush? = null,
     actions: @Composable () -> Unit = {},
     titleAlphaProvider: (() -> Float)? = null,
     content: @Composable BoxScope.(GlassScreenChrome) -> Unit,
 ) {
-    val chrome = rememberGlassScreenChrome(background = pageColor)
+    val chrome = rememberGlassScreenChrome(background = pageColor, backgroundBrush = backgroundBrush)
     CompositionLocalProvider(LocalAppBackdrop provides chrome.backdrop) {
         ScreenChromeBox(
             title = title,
@@ -243,13 +244,14 @@ fun ScreenLazyPage(
     onBack: (() -> Unit)? = null,
     onBackLongClick: (() -> Unit)? = null,
     pageColor: Color = AppTheme.colorScheme.background,
+    backgroundBrush: androidx.compose.ui.graphics.Brush? = null,
     horizontalPadding: Dp = 0.dp,
     actions: @Composable () -> Unit = {},
     listState: LazyListState = rememberLazyListState(),
     largeTitle: @Composable () -> Unit = { ScreenLargeTitle(title) },
     content: LazyListScope.() -> Unit,
 ) {
-    val chrome = rememberGlassScreenChrome(background = pageColor)
+    val chrome = rememberGlassScreenChrome(background = pageColor, backgroundBrush = backgroundBrush)
     val lazyTitleProgress = rememberTitleCollapseProgressState(listState, titleItemKey = "title")
 
     CompositionLocalProvider(LocalAppBackdrop provides chrome.backdrop) {

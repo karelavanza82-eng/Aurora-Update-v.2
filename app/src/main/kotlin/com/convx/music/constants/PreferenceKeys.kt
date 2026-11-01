@@ -164,6 +164,7 @@ val AppleArtworkKey = booleanPreferencesKey("appleArtwork")
 val LocalAlbumsByYearKey = booleanPreferencesKey("localAlbumsByYear")
 /** Switches Home, Library, and Search to the on-device music library. */
 val LocalOnlyModeKey = booleanPreferencesKey("localOnlyMode")
+val SettingsBackgroundKey = stringPreferencesKey("settingsBackground")
 val DynamicIslandEnabledKey = booleanPreferencesKey("dynamicIslandEnabled")
 /** Newline-separated folder paths excluded from local scanning. */
 val LocalExcludedFoldersKey = stringPreferencesKey("localExcludedFolders")

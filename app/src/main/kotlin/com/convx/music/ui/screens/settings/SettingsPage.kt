@@ -5,6 +5,9 @@
 
 package com.convx.music.ui.screens.settings
 
+import com.convx.music.utils.rememberPreference
+import com.convx.music.constants.SettingsBackgroundKey
+import androidx.compose.foundation.background
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.ColumnScope
@@ -112,20 +115,23 @@ fun SettingsLazyPage(
     listState: LazyListState = rememberLazyListState(),
     content: LazyListScope.() -> Unit,
 ) {
+    val (bgKey) = rememberPreference(SettingsBackgroundKey, defaultValue = SettingsBackgroundPreset.AURORA.key)
+    val pageBrush = SettingsBackgroundPreset.fromKey(bgKey).brush()
     androidx.compose.runtime.CompositionLocalProvider(
         androidx.compose.material3.LocalContentColor provides IosTheme.colors.label,
-    ) { ScreenLazyPage(
+    ) { Box(Modifier.fillMaxSize()) { pageBrush?.let { Box(Modifier.fillMaxSize().background(it)) }; ScreenLazyPage(
         title = title,
+        backgroundBrush = pageBrush,
         modifier = modifier,
         onBack = onBack ?: { navController.navigateUp(); Unit },
         onBackLongClick = navController::backToMain,
-        pageColor = IosTheme.colors.systemGroupedBackground,
+        pageColor = Color.Transparent,
         horizontalPadding = settingsGutter(horizontalPadding, maxContentWidth),
         actions = actions,
         listState = listState,
         largeTitle = settingsLargeTitle(title),
         content = content,
-    ) }
+    ) } }
 }
 
 /**
@@ -144,13 +150,18 @@ fun SettingsScaffold(
     maxContentWidth: Dp = SettingsContentMaxWidth,
     content: @Composable BoxScope.(GlassScreenChrome) -> Unit,
 ) {
+    val (bgKey) = rememberPreference(SettingsBackgroundKey, defaultValue = SettingsBackgroundPreset.AURORA.key)
+    val pageBrush = SettingsBackgroundPreset.fromKey(bgKey).brush()
+    Box(Modifier.fillMaxSize()) {
+        pageBrush?.let { Box(Modifier.fillMaxSize().background(it)) }
     ScreenScaffold(
         title = title,
+        backgroundBrush = pageBrush,
         titleAlpha = titleAlpha,
         titleAlphaProvider = titleAlphaProvider,
         onBack = onBack ?: { navController.navigateUp(); Unit },
         onBackLongClick = navController::backToMain,
-        pageColor = pageColor,
+        pageColor = Color.Transparent,
         actions = actions,
         content = { chrome ->
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
@@ -158,4 +169,5 @@ fun SettingsScaffold(
             }
         },
     )
+    }
 }

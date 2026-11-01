@@ -5,6 +5,9 @@
 
 package com.convx.music.ui.component
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import com.convx.music.ui.component.liquidGlass
+import com.convx.music.ui.component.LocalGlassEffectConfig
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -72,8 +75,7 @@ fun IosSettingsGroup(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(ContinuousRoundedRectangle(IosMetrics.GroupedCornerRadius))
-                .background(Color.White.copy(alpha = 0.06f))
+                .settingsGlassCard(shape = RoundedCornerShape(IosMetrics.GroupedCornerRadius))
         ) {
             items.forEachIndexed { index, item ->
                 if (index > 0) {
