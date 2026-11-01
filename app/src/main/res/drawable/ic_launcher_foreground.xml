@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Aurosly launcher foreground: paw print inside a circle ring.
+  Drawn in a 108×108dp adaptive-icon safe-zone viewport.
+  The outer ring sits at ~8dp from the edge; the paw fills the inner disc.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Outer ring -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="@color/ic_launcher_foreground_color"
+        android:strokeWidth="5"
+        android:pathData="M54,12 A42,42 0 1,1 53.999,12 Z" />
+
+    <!-- Main pad (heart-shaped large pad) -->
+    <path
+        android:fillColor="@color/ic_launcher_foreground_color"
+        android:pathData="
+          M54,72
+          C44,72 36,63 36,55
+          C36,47 44,41 54,41
+          C64,41 72,47 72,55
+          C72,63 64,72 54,72 Z" />
+
+    <!-- Top-left toe -->
+    <path
+        android:fillColor="@color/ic_launcher_foreground_color"
+        android:pathData="M38,37 A7,8.5 0 1,1 37.999,37 Z" />
+
+    <!-- Top-center-left toe -->
+    <path
+        android:fillColor="@color/ic_launcher_foreground_color"
+        android:pathData="M48,29 A7,8.5 0 1,1 47.999,29 Z" />
+
+    <!-- Top-center-right toe -->
+    <path
+        android:fillColor="@color/ic_launcher_foreground_color"
+        android:pathData="M60,29 A7,8.5 0 1,1 59.999,29 Z" />
+
+    <!-- Top-right toe -->
+    <path
+        android:fillColor="@color/ic_launcher_foreground_color"
+        android:pathData="M70,37 A7,8.5 0 1,1 69.999,37 Z" />
+
+</vector>

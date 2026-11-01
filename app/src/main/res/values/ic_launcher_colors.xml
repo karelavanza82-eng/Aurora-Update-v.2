@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared background layer for every app-icon variant. -->
+    <color name="ic_launcher_tile">#1C1C1E</color>
+    <color name="ic_launcher_foreground_color">#FFFFFFFF</color>
+</resources>
