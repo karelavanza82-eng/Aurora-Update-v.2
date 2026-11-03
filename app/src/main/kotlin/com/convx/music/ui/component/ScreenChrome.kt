@@ -5,6 +5,7 @@
 
 package com.convx.music.ui.component
 
+import com.convx.music.ui.component.backdrop.backdrops.layerBackdrop
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.asPaddingValues
@@ -59,6 +60,7 @@ fun ScreenChromeBox(
     titleAlpha: Float,
     pageColor: Color,
     chrome: GlassScreenChrome,
+    cardBackdrop: com.convx.music.ui.component.backdrop.backdrops.LayerBackdrop? = null,
     onBack: (() -> Unit)?,
     onBackLongClick: (() -> Unit)?,
     actions: @Composable () -> Unit,
@@ -74,6 +76,11 @@ fun ScreenChromeBox(
             // different colour from the rest of the screen.
             .background(pageColor),
     ) {
+        // Page background only, recorded for glass cards. Drawn before the content.
+        cardBackdrop?.let {
+            Box(Modifier.fillMaxSize().layerBackdrop(it))
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -81,8 +88,15 @@ fun ScreenChromeBox(
                 // than transparency at the top of the page.
                 .background(pageColor)
                 .then(chrome.screenModifier()),
-            content = content,
-        )
+        ) {
+            if (cardBackdrop != null) {
+                androidx.compose.runtime.CompositionLocalProvider(LocalAppBackdrop provides cardBackdrop) {
+                    content()
+                }
+            } else {
+                content()
+            }
+        }
 
         TopFadeBlur(
             hazeState = chrome.hazeState,
@@ -121,11 +135,12 @@ fun ScreenScaffold(
     onBackLongClick: (() -> Unit)? = null,
     pageColor: Color = AppTheme.colorScheme.background,
     backgroundBrush: androidx.compose.ui.graphics.Brush? = null,
+    glassOverPageSource: Boolean = false,
     actions: @Composable () -> Unit = {},
     titleAlphaProvider: (() -> Float)? = null,
     content: @Composable BoxScope.(GlassScreenChrome) -> Unit,
 ) {
-    val chrome = rememberGlassScreenChrome(background = pageColor, backgroundBrush = backgroundBrush)
+    val chrome = rememberGlassScreenChrome(background = pageColor, backgroundBrush = backgroundBrush, glassOverPageSource = glassOverPageSource)
     CompositionLocalProvider(LocalAppBackdrop provides chrome.backdrop) {
         ScreenChromeBox(
             title = title,
@@ -133,6 +148,7 @@ fun ScreenScaffold(
             titleAlphaProvider = titleAlphaProvider,
             pageColor = pageColor,
             chrome = chrome,
+            cardBackdrop = chrome.cardBackdrop,
             onBack = onBack,
             onBackLongClick = onBackLongClick,
             actions = actions,
@@ -175,9 +191,11 @@ fun ScreenPage(
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,
     scrollState: ScrollState = rememberScrollState(),
     largeTitle: @Composable () -> Unit = { ScreenLargeTitle(title) },
+    backgroundBrush: androidx.compose.ui.graphics.Brush? = null,
+    glassOverPageSource: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val chrome = rememberGlassScreenChrome(background = pageColor)
+    val chrome = rememberGlassScreenChrome(background = pageColor, backgroundBrush = backgroundBrush, glassOverPageSource = glassOverPageSource)
     // Measured, not guessed: the title block's height is the exact distance the
     // page has to travel before the compact title should be fully in.
     var titleBlockHeight by remember { mutableIntStateOf(1) }
@@ -193,6 +211,7 @@ fun ScreenPage(
             },
             pageColor = pageColor,
             chrome = chrome,
+            cardBackdrop = chrome.cardBackdrop,
             onBack = onBack,
             onBackLongClick = onBackLongClick,
             actions = actions,
@@ -245,13 +264,14 @@ fun ScreenLazyPage(
     onBackLongClick: (() -> Unit)? = null,
     pageColor: Color = AppTheme.colorScheme.background,
     backgroundBrush: androidx.compose.ui.graphics.Brush? = null,
+    glassOverPageSource: Boolean = false,
     horizontalPadding: Dp = 0.dp,
     actions: @Composable () -> Unit = {},
     listState: LazyListState = rememberLazyListState(),
     largeTitle: @Composable () -> Unit = { ScreenLargeTitle(title) },
     content: LazyListScope.() -> Unit,
 ) {
-    val chrome = rememberGlassScreenChrome(background = pageColor, backgroundBrush = backgroundBrush)
+    val chrome = rememberGlassScreenChrome(background = pageColor, backgroundBrush = backgroundBrush, glassOverPageSource = glassOverPageSource)
     val lazyTitleProgress = rememberTitleCollapseProgressState(listState, titleItemKey = "title")
 
     CompositionLocalProvider(LocalAppBackdrop provides chrome.backdrop) {
@@ -261,6 +281,7 @@ fun ScreenLazyPage(
             titleAlphaProvider = { lazyTitleProgress.value },
             pageColor = pageColor,
             chrome = chrome,
+            cardBackdrop = chrome.cardBackdrop,
             onBack = onBack,
             onBackLongClick = onBackLongClick,
             actions = actions,

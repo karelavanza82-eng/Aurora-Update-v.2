@@ -17,6 +17,14 @@ import java.time.ZoneOffset
 import com.music.innertube.models.IpVersion
 
 val IsFirstRunKey = booleanPreferencesKey("isFirstRun")
+/** Music Island: pill musik di atas layar saat app di background. Default mati. */
+val MusicIslandEnabledKey = booleanPreferencesKey("musicIslandEnabled")
+val MusicIslandWidthKey = intPreferencesKey("musicIslandWidth")
+val MusicIslandHeightKey = intPreferencesKey("musicIslandHeight")
+val MusicIslandOffsetKey = intPreferencesKey("musicIslandOffset")
+val MusicIslandOffsetXKey = intPreferencesKey("musicIslandOffsetX")
+val MusicIslandTextSizeKey = intPreferencesKey("musicIslandTextSize")
+val MusicIslandOpacityKey = floatPreferencesKey("musicIslandOpacity")
 /** Set once, the first time the app ever runs — gates the donation prompt on "used for
  *  a while" rather than showing it to a brand new install. */
 val FirstLaunchTimestampKey = longPreferencesKey("firstLaunchTimestamp")

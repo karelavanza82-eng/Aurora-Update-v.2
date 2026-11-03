@@ -82,6 +82,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.convx.music.ui.screens.settings.ContentSettings
 import com.convx.music.ui.screens.settings.DiscordLoginScreen
 import com.convx.music.ui.screens.settings.PlayerSettings
+import com.convx.music.ui.screens.settings.DynamicIslandSettings
 import com.convx.music.ui.screens.settings.PlayerAdvancedSettings
 import com.convx.music.ui.screens.settings.AppearanceAdvancedSettings
 import com.convx.music.ui.screens.settings.ContentAdvancedSettings
@@ -552,6 +553,10 @@ fun NavGraphBuilder.navigationBuilder(
     
     sharedComposable("settings/player") {
         PlayerSettings(navController, scrollBehavior)
+    }
+
+    sharedComposable("settings/dynamic_island") {
+        DynamicIslandSettings(navController, scrollBehavior)
     }
 
     sharedComposable("settings/player/advanced") {

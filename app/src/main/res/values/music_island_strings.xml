@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="music_island_a11y_label">Aurora Dynamic Island</string>
+    <string name="music_island_a11y_desc">Menampilkan pemutar musik Aurora di atas layar. Layanan ini tidak membaca isi layar lain.</string>
+</resources>

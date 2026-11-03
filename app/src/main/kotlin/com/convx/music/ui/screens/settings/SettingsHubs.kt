@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.convx.music.R
 import com.convx.music.ui.component.IosPageSheet
+import com.convx.music.ui.component.settingsGlassCard
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -92,6 +94,8 @@ object SettingsHubs {
                         "Thumbnail, mini player, buttons and badges", "mini player comment button audio quality badge thumbnail"),
                     SettingsLink("Player icons", R.drawable.tune, { systemOrange }, route("settings/appearance/playericons"),
                         "Choose the playback control icons"),
+                    SettingsLink("Dynamic Island", R.drawable.play, { systemPink }, route("settings/dynamic_island"),
+                        "Pill pemutar musik di atas layar"),
                     SettingsLink("Canvas", R.drawable.canvas_art, { systemTeal }, route("settings/appearance/canvas"),
                         "Animated artwork behind the player", "video animated artwork"),
                 ),
@@ -335,8 +339,7 @@ fun SettingsLinkCard(
         Column(
             Modifier
                 .fillMaxWidth()
-                .clip(ContinuousRoundedRectangle(IosMetrics.GroupedCornerRadius))
-                .background(IosTheme.colors.secondarySystemGroupedBackground),
+                .settingsGlassCard(shape = RoundedCornerShape(IosMetrics.GroupedCornerRadius)),
         ) {
             links.forEachIndexed { i, link ->
                 if (i > 0) HorizontalDivider(

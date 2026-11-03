@@ -81,24 +81,28 @@ fun SettingsPage(
     scrollState: ScrollState = rememberScrollState(),
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val (bgKey) = rememberPreference(SettingsBackgroundKey, defaultValue = SettingsBackgroundPreset.AURORA.key)
+    val pageBrush = SettingsBackgroundPreset.fromKey(bgKey).brush()
     androidx.compose.runtime.CompositionLocalProvider(
         androidx.compose.material3.LocalContentColor provides IosTheme.colors.label,
-    ) { ScreenPage(
+    ) { Box(Modifier.fillMaxSize()) { pageBrush?.let { Box(Modifier.fillMaxSize().background(it)) }; ScreenPage(
         title = title,
         modifier = modifier,
         onBack = onBack ?: { navController.navigateUp(); Unit },
         onBackLongClick = navController::backToMain,
-        // Cards are painted on the iOS grouped fill, so the page behind them must be too.
-        pageColor = IosTheme.colors.systemGroupedBackground,
+        // With a gradient, the page is transparent and the gradient shows through; cards glass over it.
+        pageColor = if (pageBrush != null) Color.Transparent else IosTheme.colors.systemGroupedBackground,
         horizontalPadding = settingsGutter(horizontalPadding, maxContentWidth),
         actions = actions,
         scrollState = scrollState,
         largeTitle = settingsLargeTitle(title),
+        backgroundBrush = pageBrush,
+        glassOverPageSource = true,
         content = {
             content()
             Spacer(Modifier.height(32.dp))
         },
-    ) }
+    ) } }
 }
 
 /** The LazyColumn flavour, for settings pages whose body is a real list. */
@@ -130,6 +134,7 @@ fun SettingsLazyPage(
         actions = actions,
         listState = listState,
         largeTitle = settingsLargeTitle(title),
+        glassOverPageSource = true,
         content = content,
     ) } }
 }
@@ -163,6 +168,7 @@ fun SettingsScaffold(
         onBackLongClick = navController::backToMain,
         pageColor = Color.Transparent,
         actions = actions,
+        glassOverPageSource = true,
         content = { chrome ->
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
                 Box(Modifier.fillMaxSize().widthIn(max = maxContentWidth)) { content(chrome) }
