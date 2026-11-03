@@ -7,18 +7,18 @@ package com.convx.music.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 /**
  * Card surface for settings.
  *
- * Real liquid glass (blur and reflection of the page gradient) where the device supports it.
- * Elsewhere the card stays translucent with a light rim, so the gradient behind it still shows.
+ * Glass samples the page gradient only (see GlassScreenChrome.cardBackdrop), never the
+ * content it sits in, so it does not recurse the RenderNode draw.
  */
 @Composable
 fun Modifier.settingsGlassCard(shape: RoundedCornerShape): Modifier =
