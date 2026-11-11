@@ -272,6 +272,4 @@
     <string name="action_login">Masuk</string>
     <string name="project_location">Proyek ini berada di Indonesia</string>
     <string name="home_top_title">Welcome Aurora</string>
-    <string name="dynamic_island">Dynamic Island</string>
-    <string name="dynamic_island_desc">Tampilkan kapsul musik di area notch saat musik diputar</string>
 </resources>

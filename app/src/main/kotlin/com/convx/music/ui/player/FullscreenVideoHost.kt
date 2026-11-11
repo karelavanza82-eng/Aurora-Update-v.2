@@ -70,7 +70,7 @@ internal val LocalFullscreenVideo = staticCompositionLocalOf<FullscreenVideoStat
 @Composable
 internal fun FullscreenVideoOverlay(state: FullscreenVideoState) {
     val session = state.session ?: return
-    val reduceMotion by rememberPreference(ReduceDynamicBlurKey, false)
+    val reduceMotion by rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     val reduced = reduceMotion || !android.animation.ValueAnimator.areAnimatorsEnabled()
     LaunchedEffect(session) {
         session.connection.mediaMetadata.collect { metadata ->

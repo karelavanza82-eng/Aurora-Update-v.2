@@ -61,7 +61,7 @@ internal fun YouTubeVideoPane(
     val fullscreenHost = LocalFullscreenVideo.current
     val coveredByFullscreen = !fullscreenOnly && fullscreenHost?.session?.stream?.mediaId == stream.mediaId
     val metadata by connection.mediaMetadata.collectAsStateWithLifecycle()
-    val reduceMotion by com.convx.music.utils.rememberPreference(com.convx.music.constants.ReduceDynamicBlurKey, false)
+    val reduceMotion by com.convx.music.utils.rememberPreference(com.convx.music.constants.ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     var inPictureInPicture by remember(activity) { mutableStateOf(activity?.isInPictureInPictureMode == true) }
     var cropVideo by rememberSaveable(stream.mediaId) { mutableStateOf(false) }
     var controlsVisible by remember(stream.mediaId) { mutableStateOf(true) }

@@ -5,7 +5,6 @@
 
 package com.convx.music.ui.component
 
-import android.app.ActivityManager
 import android.os.Build
 import com.convx.music.LocalAmbientBackgroundColor
 import androidx.compose.foundation.shape.CornerBasedShape
@@ -175,13 +174,11 @@ fun glassResolutionScale(blurRadiusDp: Float): Float {
  */
 fun isGlassSupported(sdkInt: Int = Build.VERSION.SDK_INT): Boolean = sdkInt >= Build.VERSION_CODES.S
 
-/** Whether Android classifies this device as low-RAM. */
+/** Whether this device is short on RAM: Android's own low-RAM flag, or 4 GiB and under. See [DeviceTier]. */
 @Composable
 fun isLowRamDevice(): Boolean {
     val context = LocalContext.current
-    return remember {
-        context.getSystemService(ActivityManager::class.java)?.isLowRamDevice ?: false
-    }
+    return remember { com.convx.music.utils.DeviceTier.isLowEnd(context) }
 }
 
 /** Combines the API-level check with the low-RAM device check; use this to gate glass. */

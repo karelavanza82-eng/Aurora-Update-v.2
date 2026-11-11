@@ -80,7 +80,7 @@ fun TopFadeBlur(
     /** Width of the side bar docked at the start edge; the strip fades out before it instead of ending abruptly. */
     startFade: Dp = sideBarStartInset(),
 ) {
-    val reduceDynamicBlur by rememberPreference(ReduceDynamicBlurKey, false)
+    val reduceDynamicBlur by rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     // The caller uses a solid bar when dynamic blur is disabled.
     if (reduceDynamicBlur) return
 

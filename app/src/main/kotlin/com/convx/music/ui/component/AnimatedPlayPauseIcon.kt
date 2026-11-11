@@ -34,7 +34,7 @@ fun AnimatedPlayPauseIcon(
     tint: Color = Color.Unspecified,
     size: Dp = 32.dp,
 ) {
-    val (reduceMotion) = rememberPreference(ReduceDynamicBlurKey, false)
+    val (reduceMotion) = rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     val description = stringResource(if (isPlaying) R.string.pause else R.string.play)
     Box(modifier = modifier.size(size), contentAlignment = Alignment.Center) {
         AnimatedContent(

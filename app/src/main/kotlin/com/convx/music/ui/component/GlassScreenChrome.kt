@@ -25,12 +25,6 @@ class GlassScreenChrome internal constructor(
     val backdrop: LayerBackdrop,
     val hazeState: HazeState,
     private val freeze: com.convx.music.ui.component.backdrop.backdrops.BackdropFreeze,
-    /**
-     * Holds only the page background, never the content. Glass surfaces inside the content
-     * sample this instead of [backdrop], because sampling [backdrop] from inside the content
-     * that it records recurses the RenderNode draw.
-     */
-    val cardBackdrop: LayerBackdrop? = null,
 ) {
     // Reuse the scrolling content's frozen state to avoid re-running its effects on every scroll frame.
     val frozen: () -> Boolean get() = freeze.frozen
@@ -49,11 +43,7 @@ class GlassScreenChrome internal constructor(
 }
 
 @Composable
-fun rememberGlassScreenChrome(
-    background: Color,
-    backgroundBrush: androidx.compose.ui.graphics.Brush? = null,
-    glassOverPageSource: Boolean = false,
-): GlassScreenChrome {
+fun rememberGlassScreenChrome(background: Color, backgroundBrush: androidx.compose.ui.graphics.Brush? = null): GlassScreenChrome {
     val freeze = rememberBackdropFreeze()
     val backdrop = rememberLayerBackdrop(
         // Fills the screen background into the capture BEFORE content, same
@@ -65,12 +55,6 @@ fun rememberGlassScreenChrome(
             { if (backgroundBrush != null) drawRect(backgroundBrush) else drawRect(bg); drawContent() }
         }
     )
-    val cardBackdrop = if (glassOverPageSource) rememberLayerBackdrop(
-        onDraw = remember(background, backgroundBrush) {
-            val bg = background
-            { if (backgroundBrush != null) drawRect(backgroundBrush) else drawRect(bg) }
-        }
-    ) else null
     val hazeState = remember { HazeState() }
-    return remember(backdrop, hazeState, freeze, cardBackdrop) { GlassScreenChrome(backdrop, hazeState, freeze, cardBackdrop) }
+    return remember(backdrop, hazeState, freeze) { GlassScreenChrome(backdrop, hazeState, freeze) }
 }

@@ -148,16 +148,6 @@ import com.convx.music.constants.MediaSessionConstants.CommandToggleStartRadio
 import com.convx.music.constants.PauseListenHistoryKey
 import com.convx.music.constants.PauseOnMute
 import com.convx.music.constants.PersistentQueueKey
-import com.convx.music.constants.MusicIslandEnabledKey
-import com.convx.music.constants.MusicIslandHeightKey
-import com.convx.music.constants.MusicIslandOffsetKey
-import com.convx.music.constants.MusicIslandOffsetXKey
-import com.convx.music.constants.MusicIslandOpacityKey
-import com.convx.music.constants.MusicIslandTextSizeKey
-import com.convx.music.constants.MusicIslandWidthKey
-import com.convx.music.island.IslandStyle
-import com.convx.music.island.MusicIslandBridge
-
 import com.convx.music.constants.PersistentShuffleAcrossQueuesKey
 import com.convx.music.constants.PlayerVolumeKey
 import com.convx.music.constants.RememberShuffleAndRepeatKey
@@ -485,7 +475,6 @@ class MusicService :
 
     private lateinit var mediaSession: MediaLibrarySession
 
-
     private val playerInitialized = MutableStateFlow(false)
     val isPlayerReady: kotlinx.coroutines.flow.StateFlow<Boolean> = playerInitialized.asStateFlow()
 
@@ -693,22 +682,12 @@ class MusicService :
                 cachedAutoLoadMore = prefs[AutoLoadMoreKey] ?: true
                 cachedDisableLoadMoreWhenRepeatAll = prefs[DisableLoadMoreWhenRepeatAllKey] ?: false
                 cachedPersistentQueue = prefs[PersistentQueueKey] ?: true
-                MusicIslandBridge.enabled = prefs[MusicIslandEnabledKey] ?: false
-                MusicIslandBridge.style = IslandStyle(
-                    widthDp = prefs[MusicIslandWidthKey] ?: 220,
-                    heightDp = prefs[MusicIslandHeightKey] ?: 40,
-                    offsetDp = prefs[MusicIslandOffsetKey] ?: 36,
-                    offsetXDp = prefs[MusicIslandOffsetXKey] ?: 0,
-                    textSp = prefs[MusicIslandTextSizeKey] ?: 13,
-                    opacity = prefs[MusicIslandOpacityKey] ?: 1f,
-                )
             }
         }
         sleepTimer = SleepTimer(scope, player)
         player.addListener(sleepTimer)
 
         playerInitialized.value = true
-        MusicIslandBridge.playerProvider = { player }
         Timber.tag(TAG).d("Player successfully initialized")
 
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -3959,7 +3938,6 @@ class MusicService :
 
     override fun onDestroy() {
         isRunning = false
-        MusicIslandBridge.playerProvider = null
 
         try {
             unregisterReceiver(screenStateReceiver)

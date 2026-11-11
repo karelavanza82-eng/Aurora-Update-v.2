@@ -69,7 +69,6 @@ import androidx.navigation.NavController
 import com.convx.music.LocalPlayerAwareWindowInsets
 import com.convx.music.R
 import com.convx.music.ui.component.settingsGlassCard
-import com.convx.music.constants.SettingsBackgroundKey
 import com.convx.music.ui.component.liquidGlass
 import com.convx.music.ui.component.LocalGlassEffectConfig
 import com.convx.music.core.updater.getAutoUpdateCheckSetting
@@ -134,12 +133,7 @@ fun SettingsScreen(
     var selectedHubId by rememberSaveable { mutableStateOf(SettingsHubs.player.id) }
     val searchEntries = rememberSearchEntries()
 
-    val (bgKey) = rememberPreference(SettingsBackgroundKey, defaultValue = SettingsBackgroundPreset.AURORA.key)
-    val pageBrush = SettingsBackgroundPreset.fromKey(bgKey).brush()
-
     BoxWithConstraints(Modifier.fillMaxSize()) {
-        // Drawn inside the captured layer, so the glass cards reflect this gradient.
-        pageBrush?.let { Box(Modifier.fillMaxSize().background(it)) }
         val split = maxWidth >= SplitWidth
         val trailing: (SettingsLink) -> String? = { if (it == updateLink && updateAvailable) "1" else null }
 
@@ -157,8 +151,6 @@ fun SettingsScreen(
                 if (query.isBlank()) item("localOnly") {
                     Spacer(Modifier.height(20.dp))
                     LocalOnlyRow()
-                    Spacer(Modifier.height(14.dp))
-                    SettingsBackgroundPicker()
                 }
                 if (query.isBlank()) {
                     if (!sidebar) item("tiles") {

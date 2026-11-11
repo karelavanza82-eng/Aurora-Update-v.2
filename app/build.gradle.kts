@@ -284,7 +284,7 @@ dependencies {
     implementation(libs.compose.foundation)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.util)
-    implementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.tooling)
     implementation(libs.compose.animation)
     implementation(libs.compose.reorderable)
 
@@ -373,7 +373,6 @@ dependencies {
     coreLibraryDesugaring(libs.desugaring)
     implementation(libs.timber)
     implementation(libs.smoothCorner)
-    implementation(libs.lottie.compose)
     implementation(libs.androidx.material.icons.extended.v178)
     implementation(libs.work.runtime.ktx)
     implementation(libs.androidx.core.splashscreen)

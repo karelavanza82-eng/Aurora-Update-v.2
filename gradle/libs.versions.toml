@@ -42,7 +42,6 @@ tinypinyin = "2.0.3"
 protobuf = "4.33.5"
 protobufPlugin = "0.9.6"
 smoothCorner = "v1.0.0"
-lottie = "6.6.2"
 work = "2.10.0"
 coreSplashscreen = "1.2.0"
 material3Version = "1.4.0"
@@ -151,7 +150,6 @@ tinypinyin = { module = "com.github.promeG:tinypinyin", version.ref = "tinypinyi
 protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobuf" }
 smoothCorner = { module = "com.github.racra:smooth-corner-rect-android-compose", version.ref = "smoothCorner" }
-lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3Version" }

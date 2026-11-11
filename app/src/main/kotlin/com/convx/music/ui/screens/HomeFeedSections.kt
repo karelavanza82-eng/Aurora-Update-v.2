@@ -10,6 +10,8 @@ import com.convx.music.ui.component.SymbolIcon
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -158,12 +160,10 @@ internal fun LazyListScope.heroSection(
             val heroSubtitle = remember(top.id) {
                 top.artists.joinToString { it.name }
             }
-            HomeHeroCard(
+            com.convx.music.ui.component.AuroraSpotlight(
                 title = top.song.title,
                 subtitle = heroSubtitle,
                 thumbnailUrl = top.song.thumbnailUrl,
-                meshEnabled = true,
-                meshPaused = meshPaused,
                 onPlay = {
                     deps.playerConnection.playQueue(
                         ListQueue(
@@ -253,12 +253,33 @@ internal fun LazyListScope.quickPicksSection(
                 },
             )
         }
-        shelfList(
-            key = "quick_picks_list",
-            deps = deps,
-            entries = quickPicks.distinctBy { it.id }
-                .map { (songMap[it.id] ?: it).toShelfEntry(deps, mediaMetadata) },
-        )
+        val gridRows = quickPicks.distinctBy { it.id }.take(8).chunked(2)
+        items(gridRows.size, key = { "quick_grid_$it" }, contentType = { "quick_grid_row" }) { index ->
+            val row = gridRows[index]
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = AppPage.Gutter)
+                    .padding(bottom = 14.dp)
+                    .animateItem(),
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
+            ) {
+                row.forEach { entry ->
+                    com.convx.music.ui.component.AuroraGlassTile(
+                        title = entry.song.title,
+                        subtitle = entry.artists.joinToString { it.name },
+                        thumbnailUrl = entry.song.thumbnailUrl,
+                        onClick = {
+                            deps.playerConnection.playQueue(
+                                ListQueue(title = entry.song.title, items = listOf(entry.toMediaItem()))
+                            )
+                        },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                if (row.size == 1) Spacer(Modifier.weight(1f))
+            }
+        }
     }
 }
 

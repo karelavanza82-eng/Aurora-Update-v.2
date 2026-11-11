@@ -53,7 +53,7 @@ internal fun RollingPlaybackTime(
     val currentSeconds by rememberUpdatedState(seconds)
     val value by remember { derivedStateOf { currentSeconds().coerceIn(0, Long.MAX_VALUE / 1000) } }
     val formatted = makeTimeString(value * 1000)
-    val reduceMotion by rememberPreference(ReduceDynamicBlurKey, false)
+    val reduceMotion by rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     val style = (textStyle ?: AppTheme.typography.labelSmall.copy(
         fontSize = 10.sp,
         lineHeight = 18.sp,

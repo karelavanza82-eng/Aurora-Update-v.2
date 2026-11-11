@@ -224,7 +224,7 @@ private fun VideoGlassButton(
     content: @Composable () -> Unit,
 ) {
     val stretch = rememberElasticStretch()
-    val reduceMotion by rememberPreference(ReduceDynamicBlurKey, false)
+    val reduceMotion by rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     val material = Modifier.videoControlSurface(VideoControlShape)
     Box(
         Modifier.then(if (reduceMotion) Modifier else Modifier.graphicsLayer(elasticStretchLayerBlock(stretch)))

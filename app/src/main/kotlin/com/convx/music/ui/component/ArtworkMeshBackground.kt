@@ -110,7 +110,7 @@ fun ArtworkMeshBackground(
     appearance: PlaylistAppearance? = null,
 ) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
-    val reduceMotion by rememberPreference(ReduceDynamicBlurKey, false)
+    val reduceMotion by rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     val isPaused by rememberUpdatedState(paused)
     // Playlist pages (those passing an appearance) get a livelier mesh than the raw cover average.
     val palette = (appearance?.mesh ?: rememberMeshPalette(imageUrl)).let { sampled ->

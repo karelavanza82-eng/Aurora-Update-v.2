@@ -141,7 +141,7 @@ internal fun ClassicPageRegion(
     header: @Composable () -> Unit,
     page: @Composable (PlayerInternalState) -> Unit,
 ) {
-    val reduceMotion by rememberPreference(ReduceDynamicBlurKey, false)
+    val reduceMotion by rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     val systemAnimations = android.animation.ValueAnimator.areAnimatorsEnabled()
     val reduced = reduceMotion || !systemAnimations
     AnimatedContent(

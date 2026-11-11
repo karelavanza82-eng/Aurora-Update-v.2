@@ -94,7 +94,7 @@ fun HomeHeroCard(
     // normal scale on Motion.morphEnter (340ms iOS curve, single clock for scale
     // and alpha). One-shot per composition: keying on thumbnailUrl re-snapped the
     // entrance when the Apple artwork resolved over YouTube's (double zoom).
-    val (reduceMotion) = rememberPreference(ReduceDynamicBlurKey, false)
+    val (reduceMotion) = rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     val scale = remember { Animatable(1.12f) }
     val alpha = remember { Animatable(0f) }
     LaunchedEffect(Unit) {

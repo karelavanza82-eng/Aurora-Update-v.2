@@ -52,7 +52,7 @@ import kotlin.math.sin
  */
 @Composable
 internal fun rememberMeshPhase(visible: State<Boolean>, paused: () -> Boolean): State<Float> {
-    val (reduceMotion) = rememberPreference(ReduceDynamicBlurKey, false)
+    val (reduceMotion) = rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     val lifecycleOwner = LocalLifecycleOwner.current
     val motionFrozen = LocalAppMotionFrozen.current
     val currentPaused = rememberUpdatedState(paused)

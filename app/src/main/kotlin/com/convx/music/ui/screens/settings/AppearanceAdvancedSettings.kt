@@ -211,7 +211,7 @@ fun AppearanceAdvancedSettings(
         showRestartDialog = true
     }
 
-    val (reduceDynamicBlur, onReduceDynamicBlurChange) = rememberPreference(ReduceDynamicBlurKey, false)
+    val (reduceDynamicBlur, onReduceDynamicBlurChange) = rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     val (topBarBlurStyle, onTopBarBlurStyleChange) = rememberEnumPreference(TopBarBlurStyleKey, TopBarBlurStyle.HAZE_PROGRESSIVE)
     var showTopBarBlurDialog by rememberSaveable { mutableStateOf(false) }
     val (showHomeFab, onShowHomeFabChange) = rememberPreference(ShowHomeFabKey, defaultValue = true)

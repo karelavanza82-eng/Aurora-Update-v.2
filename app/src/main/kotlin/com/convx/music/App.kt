@@ -75,6 +75,7 @@ class App : Application(), SingletonImageLoader.Factory {
 
     override fun onCreate() {
         super.onCreate()
+        com.convx.music.utils.CrashLogger.install(this)
         com.music.spotify.SpotifyAuth.initialize(this)
         // The recovery activity runs in its own process. Do not reopen the database,
         // preferences, native caches or playback integrations that may have crashed.
@@ -85,6 +86,7 @@ class App : Application(), SingletonImageLoader.Factory {
                 .runningAppProcesses?.firstOrNull { it.pid == android.os.Process.myPid() }?.processName
         }
         if (processName == "$packageName:crash") return
+        com.convx.music.utils.DeviceTier.isLowEnd(this)
         com.convx.music.canvas.AppleMusicCatalog.cacheDir = filesDir.resolve("apple_catalog")
         com.convx.music.core.UpdateNotificationHelper.cancelUpdateNotification(this)
         // Eclipse addons identify clients by UA; they require "Convx/<app-version>".
@@ -374,8 +376,7 @@ class App : Application(), SingletonImageLoader.Factory {
             // Reuse decoded images while scrolling.
             memoryCache {
                 // Limit memory use more on low-RAM devices.
-                val activityManager = getSystemService(android.app.ActivityManager::class.java)
-                val percent = if (activityManager?.isLowRamDevice == true) 0.15 else 0.25
+                val percent = if (com.convx.music.utils.DeviceTier.isLowEnd(this@App)) 0.12 else 0.25
                 MemoryCache.Builder()
                     .maxSizePercent(context, percent)
                     .build()

@@ -120,7 +120,7 @@ fun FrostedTopBar(
     pullFraction: () -> Float = { 0f },
     actions: @Composable () -> Unit = {},
 ) {
-    val reduceDynamicBlur by rememberPreference(ReduceDynamicBlurKey, false)
+    val reduceDynamicBlur by rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     // Boolean derived from progress: derivedStateOf only invalidates when the
     // threshold flips, not on every scroll pixel.
     val showDivider by remember(titleAlpha, titleAlphaProvider) {

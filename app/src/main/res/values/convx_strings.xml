@@ -1435,6 +1435,4 @@
     <string name="jam_view_only">The host has turned off playback controls for guests.</string>
     <string name="jam_leave">Leave party</string>
     <string name="home_top_title">Welcome Aurora</string>
-    <string name="dynamic_island">Dynamic Island</string>
-    <string name="dynamic_island_desc">Show a music capsule near the notch while playing</string>
 </resources>

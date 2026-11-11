@@ -568,18 +568,6 @@
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
             android:value="com.convx.music.cast.CastOptionsProvider" />
-        <service
-            android:name="com.convx.music.island.MusicIslandAccessibilityService"
-            android:exported="true"
-            android:label="@string/music_island_a11y_label"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/music_island_accessibility" />
-        </service>
     </application>
 
 </manifest>

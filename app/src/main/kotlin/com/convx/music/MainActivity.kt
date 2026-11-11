@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,7 +29,6 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.convx.music.constants.AppLanguageKey
 import com.convx.music.constants.DisableScreenshotKey
-import com.convx.music.constants.DynamicIslandEnabledKey
 import com.convx.music.constants.SYSTEM_DEFAULT
 import com.convx.music.constants.StopMusicOnTaskClearKey
 import com.convx.music.db.MusicDatabase
@@ -87,11 +85,27 @@ class MainActivity : ComponentActivity() {
     private var activityStarted = false
     private var pendingPlaybackBind: Runnable? = null
 
+    /**
+     * True on a cold launch that plays the intro while the playback service is not running yet.
+     * Starting MusicService builds the player and a lot of audio plumbing on the main thread, which is
+     * exactly when the intro animates, so the bind waits until [releasePlaybackBind] runs.
+     */
+    private var deferPlaybackBind = false
+
+    /** Called by the intro once the logo is fully shown. Safe to call more than once. */
+    private fun releasePlaybackBind() {
+        if (!deferPlaybackBind) return
+        deferPlaybackBind = false
+        if (activityStarted && playerConnection == null) bindPlaybackService()
+    }
+
     override fun onStart() {
         super.onStart()
         activityStarted = true
         if (MusicService.isRunning) {
             bindPlaybackService()
+        } else if (deferPlaybackBind) {
+            // The intro releases the bind through releasePlaybackBind().
         } else {
             val bind = Runnable {
                 pendingPlaybackBind = null
@@ -185,24 +199,37 @@ class MainActivity : ComponentActivity() {
         // Cold launch from the launcher only (WelcomeActivity hands off with this extra);
         // notification/deep-link opens go straight to the app.
         val playIntro = savedInstanceState == null && intent.getBooleanExtra(EXTRA_PLAY_INTRO, false)
+        deferPlaybackBind = playIntro && !MusicService.isRunning
         setContent {
             var showIntro by rememberSaveable { mutableStateOf(playIntro) }
+            // The app is composed only after the intro has shown the logo, so the slide-in animates
+            // alone on the main thread. Without an intro it composes straight away, as before.
+            var appMounted by rememberSaveable { mutableStateOf(!playIntro) }
             Box(Modifier.fillMaxSize()) {
-                AppRootContent(
-                    activity = this@MainActivity,
-                    intentRouter = deepLinkRouter,
-                    playerConnection = playerConnection,
-                    database = database,
-                    downloadUtil = downloadUtil,
-                    syncUtils = syncUtils,
-                    historyDataSource = historyDataSource,
-                )
-                playerConnection?.let { pc ->
-                    val isPlayingNow by pc.isPlaying.collectAsState()
-                    val metadata by pc.mediaMetadata.collectAsState()
-                    val md = metadata
+                if (appMounted) {
+                    AppRootContent(
+                        activity = this@MainActivity,
+                        intentRouter = deepLinkRouter,
+                        playerConnection = playerConnection,
+                        database = database,
+                        downloadUtil = downloadUtil,
+                        syncUtils = syncUtils,
+                        historyDataSource = historyDataSource,
+                    )
                 }
-                if (showIntro) com.convx.music.ui.component.ConvxIntro(onFinished = { showIntro = false })
+                if (showIntro) {
+                    com.convx.music.ui.component.ConvxIntro(
+                        onMountApp = {
+                            appMounted = true
+                            releasePlaybackBind()
+                        },
+                        onFinished = {
+                            appMounted = true
+                            releasePlaybackBind()
+                            showIntro = false
+                        },
+                    )
+                }
             }
         }
     }

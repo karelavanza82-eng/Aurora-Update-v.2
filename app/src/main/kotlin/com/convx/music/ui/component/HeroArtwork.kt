@@ -140,7 +140,7 @@ fun HeroMergeBand(
     hazeState: HazeState? = null,
 ) {
     // Use Haze only on supported Android versions and when dynamic blur is enabled.
-    val reduceBlur by rememberPreference(ReduceDynamicBlurKey, false)
+    val reduceBlur by rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     val useHaze = hazeState != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !reduceBlur
 
     if (!useHaze) {
@@ -202,7 +202,7 @@ fun HeroTopBlur(
     /** Height of the blur strip + the run below it the fade needs to disappear. */
     height: Dp = 140.dp,
 ) {
-    val reduceBlur by rememberPreference(ReduceDynamicBlurKey, false)
+    val reduceBlur by rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     // Gate Haze with a coarse state so idle frames skip its shader work.
     val useHaze =
         hazeState != null &&
@@ -265,7 +265,7 @@ fun HeroScrollBlur(
     blurRadius: Dp = HeroBlurRadius,
     decodeSize: Int = 160,
 ) {
-    val reduceBlur by rememberPreference(ReduceDynamicBlurKey, false)
+    val reduceBlur by rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
     // Compose each layer only while visible; update its alpha in the draw phase.
     val softOn by remember(progress) {
         androidx.compose.runtime.derivedStateOf { heroBandOn(progress.value, 0.02f, 0.70f) }

@@ -106,7 +106,7 @@ fun MeshGradientBackground(
     transitionMillis: Int = 1_400,
 ) {
     // The dynamic-blur preference also controls motion visible only through this blur.
-    val (reduceMotion) = rememberPreference(ReduceDynamicBlurKey, false)
+    val (reduceMotion) = rememberPreference(ReduceDynamicBlurKey, com.convx.music.utils.DeviceTier.lowEnd)
 
     val tuned = remember(palette.colors) {
         (palette.colors.ifEmpty { FallbackColors } + FallbackColors)
